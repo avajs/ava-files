@@ -1,0 +1,50 @@
+{
+  "name": "ava-files",
+  "version": "0.0.0",
+  "description": "My rad module",
+  "license": "MIT",
+  "repository": "avajs/ava-files",
+  "author": {
+    "name": "James Talmage",
+    "email": "james@talmage.io",
+    "url": "github.com/avajs"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "xo && nyc ava"
+  },
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "ava",
+    "files"
+  ],
+  "dependencies": {
+    "arr-flatten": "^1.0.1",
+    "bluebird": "^3.4.1",
+    "globby": "^5.0.0",
+    "ignore-by-default": "^1.0.1",
+    "multimatch": "^2.1.0",
+    "slash": "^1.0.0"
+  },
+  "devDependencies": {
+    "ava": "^0.15.1",
+    "coveralls": "^2.11.9",
+    "nyc": "^6.4.0",
+    "xo": "^0.16.0"
+  },
+  "ava": {
+    "files": [
+      "test.js"
+    ]
+  },
+  "nyc": {
+    "reporter": [
+      "lcov",
+      "text"
+    ]
+  }
+}

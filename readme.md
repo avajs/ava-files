@@ -16,9 +16,9 @@ $ npm install --save ava-files
 const AvaFiles = require('ava-files');
 
 const avaFiles = new AvaFiles({
-  cwd: '/path/to/cwd',
-  files: ['**/glob/patterns/**'],
-  sources: ['**/glob/patterns/**']
+	cwd: '/path/to/cwd',
+	files: ['**/glob/patterns/**'],
+	sources: ['**/glob/patterns/**']
 });
 
 const isTest = avaFiles.makeTestMatcher();
@@ -32,7 +32,7 @@ isSource(filePath);
 //=> true or false
 
 avaFiles.findTestFiles().then(files => {
-  // files is an array of found test files
+	// files is an array of found test files
 });
 ```
 
@@ -51,41 +51,42 @@ Default:
 
 ```js
 [
-  'test.js',
-  'test-*.js',
-  'test',
-  '**/__tests__',
-  '**/*.test.js',
-  '!**/node_modules/**',
-  '!**/fixtures/**',
-  '!**/helpers/**'
+	'test.js',
+	'test-*.js',
+	'test',
+	'**/__tests__',
+	'**/*.test.js',
+	'!**/node_modules/**',
+	'!**/fixtures/**',
+	'!**/helpers/**'
 ]
 ```
 
 ##### sources
 
 Type: `Array` of `string` glob patterns<br>
-Default: empty array
+Default: `[]`
 
 ##### cwd
 
 Type: `string`<br>
 Default: `process.cwd()`
 
-The base directory to search for files from
+The base directory to search for files from.
 
 ### avaFiles.makeTestMatcher()
 
-Creates a filter function that matches test paths
+Creates a filter function that matches test paths.
 
 ### avaFiles.makeSourceMatcher()
 
-Creates a filter function that matches source paths
+Creates a filter function that matches source paths.
 
 ### avaFiles.findTestFiles()
 
-Returns a promise for an array of string paths to the found test files
+Returns a promise for an array of string paths to the found test files.
+
 
 ## License
 
-MIT © [James Talmage](http://github.com/avajs)
+MIT © [James Talmage](https://github.com/avajs)

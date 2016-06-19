@@ -4,7 +4,7 @@ var path = require('path');
 var Promise = require('bluebird');
 var slash = require('slash');
 var globby = require('globby');
-var flatten = require('arr-flatten');
+var flatten = require('lodash.flatten');
 var defaultIgnore = require('ignore-by-default').directories();
 var multimatch = require('multimatch');
 
@@ -32,6 +32,7 @@ function AvaFiles(options) {
 	}
 
 	options = options || {};
+
 	var files = options.files;
 
 	if (!files || !files.length) {
@@ -39,7 +40,6 @@ function AvaFiles(options) {
 	}
 
 	this.excludePatterns = defaultExcludePatterns();
-
 	this.files = files;
 	this.sources = options.sources || [];
 	this.cwd = options.cwd || process.cwd();
@@ -75,6 +75,7 @@ AvaFiles.prototype.makeSourceMatcher = function () {
 	var hasPositivePattern = false;
 	this.sources.forEach(function (pattern) {
 		mixedPatterns.push(pattern);
+
 		// TODO: why not just pattern[0] !== '!'
 		if (!hasPositivePattern && pattern[0] !== '!') {
 			hasPositivePattern = true;
@@ -145,12 +146,14 @@ AvaFiles.prototype.makeTestMatcher = function () {
 		// relative to the working directory, without a leading `./`.
 		var subpaths = dirname.split(/[\\\/]/).reduce(function (subpaths, component) {
 			var parent = subpaths[subpaths.length - 1];
+
 			if (parent) {
 				// Always use / to makes multimatch consistent across platforms.
 				subpaths.push(parent + '/' + component);
 			} else {
 				subpaths.push(component);
 			}
+
 			return subpaths;
 		}, []);
 
@@ -191,11 +194,13 @@ AvaFiles.prototype.getChokidarPatterns = function () {
 	}).map(function (pattern) {
 		return '!' + pattern;
 	});
+
 	ignored = getDefaultIgnorePatterns().concat(ignored, overrideDefaultIgnorePatterns);
 
 	if (paths.length === 0) {
 		paths = ['package.json', '**/*.js'];
 	}
+
 	paths = paths.concat(this.files);
 
 	return {
@@ -229,6 +234,7 @@ function handlePaths(files, excludePatterns, globOptions) {
 	return files
 		.map(function (file) {
 			file = path.resolve(globOptions.cwd, file);
+
 			if (fs.statSync(file).isDirectory()) {
 				if (alreadySearchingParent(file)) {
 					return null;

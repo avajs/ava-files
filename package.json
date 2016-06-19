@@ -23,10 +23,10 @@
     "files"
   ],
   "dependencies": {
-    "arr-flatten": "^1.0.1",
     "bluebird": "^3.4.1",
     "globby": "^5.0.0",
     "ignore-by-default": "^1.0.1",
+    "lodash.flatten": "^4.2.0",
     "multimatch": "^2.1.0",
     "slash": "^1.0.0"
   },

@@ -5,6 +5,7 @@ var Promise = require('bluebird');
 var slash = require('slash');
 var globby = require('globby');
 var flatten = require('lodash.flatten');
+var autoBind = require('auto-bind');
 var defaultIgnore = require('ignore-by-default').directories();
 var multimatch = require('multimatch');
 
@@ -43,6 +44,8 @@ function AvaFiles(options) {
 	this.files = files;
 	this.sources = options.sources || [];
 	this.cwd = options.cwd || process.cwd();
+
+	autoBind(this);
 }
 
 AvaFiles.prototype.findTestFiles = function () {

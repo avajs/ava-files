@@ -23,6 +23,7 @@
     "files"
   ],
   "dependencies": {
+    "auto-bind": "^0.1.0",
     "bluebird": "^3.4.1",
     "globby": "^5.0.0",
     "ignore-by-default": "^1.0.1",

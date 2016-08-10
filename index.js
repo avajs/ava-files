@@ -67,7 +67,7 @@ var matchable = process.platform === 'win32' ? slash : function (path) {
 	return path;
 };
 
-AvaFiles.prototype.makeSourceMatcher = function () {
+AvaFiles.prototype.isSource = function (filePath) {
 	var mixedPatterns = [];
 	var defaultIgnorePatterns = getDefaultIgnorePatterns();
 	var overrideDefaultIgnorePatterns = [];
@@ -93,83 +93,79 @@ AvaFiles.prototype.makeSourceMatcher = function () {
 		mixedPatterns = ['package.json', '**/*.js'].concat(mixedPatterns);
 	}
 
-	return function (path) {
-		path = matchable(path);
+	filePath = matchable(filePath);
 
-		// Ignore paths outside the current working directory. They can't be matched
-		// to a pattern.
-		if (/^\.\.\//.test(path)) {
-			return false;
-		}
-
-		var isSource = multimatch(path, mixedPatterns).length === 1;
-		if (!isSource) {
-			return false;
-		}
-
-		var isIgnored = multimatch(path, defaultIgnorePatterns).length === 1;
-		if (!isIgnored) {
-			return true;
-		}
-
-		var isErroneouslyIgnored = multimatch(path, overrideDefaultIgnorePatterns).length === 1;
-		if (isErroneouslyIgnored) {
-			return true;
-		}
-
+	// Ignore paths outside the current working directory. They can't be matched
+	// to a pattern.
+	if (/^\.\.\//.test(filePath)) {
 		return false;
-	};
+	}
+
+	var isSource = multimatch(filePath, mixedPatterns).length === 1;
+	if (!isSource) {
+		return false;
+	}
+
+	var isIgnored = multimatch(filePath, defaultIgnorePatterns).length === 1;
+	if (!isIgnored) {
+		return true;
+	}
+
+	var isErroneouslyIgnored = multimatch(filePath, overrideDefaultIgnorePatterns).length === 1;
+	if (isErroneouslyIgnored) {
+		return true;
+	}
+
+	return false;
 };
 
-AvaFiles.prototype.makeTestMatcher = function () {
+AvaFiles.prototype.isTest = function (filePath) {
 	var excludePatterns = this.excludePatterns;
 	var initialPatterns = this.files.concat(excludePatterns);
 
-	return function (filepath) {
-		// Like in api.js, tests must be .js files and not start with _
-		if (path.extname(filepath) !== '.js' || path.basename(filepath)[0] === '_') {
-			return false;
-		}
+	// Like in api.js, tests must be .js files and not start with _
+	if (path.extname(filePath) !== '.js' || path.basename(filePath)[0] === '_') {
+		return false;
+	}
 
-		// Check if the entire path matches a pattern.
-		if (multimatch(matchable(filepath), initialPatterns).length === 1) {
-			return true;
-		}
+	// Check if the entire path matches a pattern.
+	if (multimatch(matchable(filePath), initialPatterns).length === 1) {
+		return true;
+	}
 
-		// Check if the path contains any directory components.
-		var dirname = path.dirname(filepath);
-		if (dirname === '.') {
-			return false;
-		}
+	// Check if the path contains any directory components.
+	var dirname = path.dirname(filePath);
+	if (dirname === '.') {
+		return false;
+	}
 
-		// Compute all possible subpaths. Note that the dirname is assumed to be
-		// relative to the working directory, without a leading `./`.
-		var subpaths = dirname.split(/[\\\/]/).reduce(function (subpaths, component) {
-			var parent = subpaths[subpaths.length - 1];
+	// Compute all possible subpaths. Note that the dirname is assumed to be
+	// relative to the working directory, without a leading `./`.
+	var subpaths = dirname.split(/[\\\/]/).reduce(function (subpaths, component) {
+		var parent = subpaths[subpaths.length - 1];
 
-			if (parent) {
-				// Always use / to makes multimatch consistent across platforms.
-				subpaths.push(parent + '/' + component);
-			} else {
-				subpaths.push(component);
-			}
-
-			return subpaths;
-		}, []);
-
-		// Check if any of the possible subpaths match a pattern. If so, generate a
-		// new pattern with **/*.js.
-		var recursivePatterns = subpaths.filter(function (subpath) {
-			return multimatch(subpath, initialPatterns).length === 1;
-		}).map(function (subpath) {
+		if (parent) {
 			// Always use / to makes multimatch consistent across platforms.
-			return subpath + '/**/*.js';
-		});
+			subpaths.push(parent + '/' + component);
+		} else {
+			subpaths.push(component);
+		}
 
-		// See if the entire path matches any of the subpaths patterns, taking the
-		// excludePatterns into account. This mimicks the behavior in api.js
-		return multimatch(matchable(filepath), recursivePatterns.concat(excludePatterns)).length === 1;
-	};
+		return subpaths;
+	}, []);
+
+	// Check if any of the possible subpaths match a pattern. If so, generate a
+	// new pattern with **/*.js.
+	var recursivePatterns = subpaths.filter(function (subpath) {
+		return multimatch(subpath, initialPatterns).length === 1;
+	}).map(function (subpath) {
+		// Always use / to makes multimatch consistent across platforms.
+		return subpath + '/**/*.js';
+	});
+
+	// See if the entire path matches any of the subpaths patterns, taking the
+	// excludePatterns into account. This mimicks the behavior in api.js
+	return multimatch(matchable(filePath), recursivePatterns.concat(excludePatterns)).length === 1;
 };
 
 AvaFiles.prototype.getChokidarPatterns = function () {

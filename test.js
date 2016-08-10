@@ -22,14 +22,12 @@ test('requires new', t => {
 test('testMatcher', t => {
 	const avaFiles = new AvaFiles({files: ['**/foo*']});
 
-	const matcher = avaFiles.makeTestMatcher();
-
 	function isTest(file) {
-		t.true(matcher(file), file + ' should be a test');
+		t.true(avaFiles.isTest(file), file + ' should be a test');
 	}
 
 	function notTest(file) {
-		t.false(matcher(file), file + ' should not be a test');
+		t.false(avaFiles.isTest(file), file + ' should not be a test');
 	}
 
 	isTest('foo-bar.js');
@@ -51,14 +49,12 @@ test('testMatcher', t => {
 test('sourceMatcher - defaults', t => {
 	const avaFiles = new AvaFiles({files: ['**/foo*']});
 
-	const matcher = avaFiles.makeSourceMatcher();
-
 	function isSource(file) {
-		t.true(matcher(file), file + ' should be a source');
+		t.true(avaFiles.isSource(file), file + ' should be a source');
 	}
 
 	function notSource(file) {
-		t.false(matcher(file), file + ' should not be a source');
+		t.false(avaFiles.isSource(file), file + ' should not be a source');
 	}
 
 	isSource('foo-bar.js');
@@ -87,10 +83,8 @@ test('sourceMatcher - allow matching specific node_modules directories', t => {
 		sources: ['node_modules/foo/**']
 	});
 
-	const matcher = avaFiles.makeSourceMatcher();
-
-	t.true(matcher('node_modules/foo/foo.js'));
-	t.false(matcher('node_modules/bar/foo.js'));
+	t.true(avaFiles.isSource('node_modules/foo/foo.js'));
+	t.false(avaFiles.isSource('node_modules/bar/foo.js'));
 });
 
 test('sourceMatcher - providing negation patterns', t => {
@@ -99,11 +93,9 @@ test('sourceMatcher - providing negation patterns', t => {
 		sources: ['!**/bar*']
 	});
 
-	const matcher = avaFiles.makeSourceMatcher();
-
-	t.false(matcher('node_modules/foo/foo.js'));
-	t.false(matcher('bar.js'));
-	t.false(matcher('foo/bar.js'));
+	t.false(avaFiles.isSource('node_modules/foo/foo.js'));
+	t.false(avaFiles.isSource('bar.js'));
+	t.false(avaFiles.isSource('foo/bar.js'));
 });
 
 test('findFiles - does not return duplicates of the same file', async t => {

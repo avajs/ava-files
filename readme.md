@@ -21,14 +21,10 @@ const avaFiles = new AvaFiles({
 	sources: ['**/glob/patterns/**']
 });
 
-const isTest = avaFiles.makeTestMatcher();
-
-isTest(filePath);
+avaFiles.isTest(filePath);
 //=> true or false
 
-const isSource = avaFiles.makeSourceMatcher();
-
-isSource(filePath);
+avaFiles.isSource(filePath);
 //=> true or false
 
 avaFiles.findTestFiles().then(files => {
@@ -74,13 +70,25 @@ Default: `process.cwd()`
 
 The base directory to search for files from.
 
-### avaFiles.makeTestMatcher()
+### avaFiles.isTest(filePath)
 
-Creates a filter function that matches test paths.
+Validate if `filePath` is a test file.
 
-### avaFiles.makeSourceMatcher()
+#### filePath
 
-Creates a filter function that matches source paths.
+Type: `string`
+
+Path to the file.
+
+### avaFiles.isSource(filePath)
+
+Validate if `filePath` is a source file.
+
+#### filePath
+
+Type: `string`
+
+Path to the file.
 
 ### avaFiles.findTestFiles()
 

@@ -92,7 +92,7 @@ Path to the file.
 
 ### avaFiles.findTestFiles()
 
-Returns a promise for an array of string paths to the found test files.
+Returns a `Promise` for an `Array` of `string` paths to the found test files.
 
 
 ## License

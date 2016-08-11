@@ -20,21 +20,23 @@
   ],
   "keywords": [
     "ava",
-    "files"
+    "files",
+    "find",
+    "glob"
   ],
   "dependencies": {
     "auto-bind": "^0.1.0",
     "bluebird": "^3.4.1",
-    "globby": "^5.0.0",
+    "globby": "^6.0.0",
     "ignore-by-default": "^1.0.1",
     "lodash.flatten": "^4.2.0",
     "multimatch": "^2.1.0",
     "slash": "^1.0.0"
   },
   "devDependencies": {
-    "ava": "^0.15.1",
+    "ava": "^0.16.0",
     "coveralls": "^2.11.9",
-    "nyc": "^6.4.0",
+    "nyc": "^7.1.0",
     "xo": "^0.16.0"
   },
   "ava": {

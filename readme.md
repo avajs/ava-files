@@ -30,6 +30,10 @@ avaFiles.isSource(filePath);
 avaFiles.findTestFiles().then(files => {
 	// files is an array of found test files
 });
+
+avaFiles.findTestHelpers().then(files => {
+	// files is an array of found test helpers
+});
 ```
 
 
@@ -93,6 +97,10 @@ Path to the file.
 ### avaFiles.findTestFiles()
 
 Returns a `Promise` for an `Array` of `string` paths to the found test files.
+
+### avaFiles.findTestHelpers()
+
+Returns a `Promise` for an `Array` of `string` paths to the found helper files.
 
 
 ## License

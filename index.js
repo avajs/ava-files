@@ -27,6 +27,15 @@ function defaultIncludePatterns() {
 	];
 }
 
+function defaultHelperPatterns() {
+	return [
+		'**/__tests__/helpers/**/*.js',
+		'**/__tests__/**/_*.js',
+		'**/test/helpers/**/*.js',
+		'**/test/**/_*.js'
+	];
+}
+
 function AvaFiles(options) {
 	if (!(this instanceof AvaFiles)) {
 		throw new TypeError('Class constructor AvaFiles cannot be invoked without \'new\'');
@@ -51,6 +60,17 @@ function AvaFiles(options) {
 AvaFiles.prototype.findTestFiles = function () {
 	return handlePaths(this.files, this.excludePatterns, {
 		cwd: this.cwd,
+		cache: Object.create(null),
+		statCache: Object.create(null),
+		realpathCache: Object.create(null),
+		symlinks: Object.create(null)
+	});
+};
+
+AvaFiles.prototype.findTestHelpers = function () {
+	return handlePaths(defaultHelperPatterns(), ['!**/node_modules/**'], {
+		cwd: this.cwd,
+		includeUnderscoredFiles: true,
 		cache: Object.create(null),
 		statCache: Object.create(null),
 		realpathCache: Object.create(null),
@@ -257,7 +277,14 @@ function handlePaths(files, excludePatterns, globOptions) {
 		})
 		.then(flatten)
 		.filter(function (file) {
-			return file && path.extname(file) === '.js' && path.basename(file)[0] !== '_';
+			return file && path.extname(file) === '.js';
+		})
+		.filter(function (file) {
+			if (path.basename(file)[0] === '_' && globOptions.includeUnderscoredFiles !== true) {
+				return false;
+			}
+
+			return true;
 		})
 		.map(function (file) {
 			return path.resolve(file);

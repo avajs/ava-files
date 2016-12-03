@@ -139,3 +139,20 @@ test('findFiles - finds the correct files by default', async t => {
 	files.sort();
 	t.deepEqual(files, expected);
 });
+
+test('findTestHelpers - finds the test helpers', async t => {
+	const fixtureDir = fixture('default-patterns');
+	process.chdir(fixtureDir);
+
+	const expected = [
+		'sub/directory/__tests__/helpers/foo.js',
+		'sub/directory/__tests__/_foo.js',
+		'test/helpers/test.js',
+		'test/_foo-help.js'
+	].sort().map(file => path.join(fixtureDir, file));
+
+	const avaFiles = new AvaFiles();
+
+	const files = await avaFiles.findTestHelpers();
+	t.deepEqual(files.sort(), expected);
+});

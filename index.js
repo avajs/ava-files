@@ -43,9 +43,17 @@ function AvaFiles(options) {
 
 	options = options || {};
 
-	var files = options.files;
+	var files = (options.files || []).map(function (file) {
+		// `./` should be removed from the beginning of patterns because
+		// otherwise they won't match change events from Chokidar
+		if (file.slice(0, 2) === './') {
+			return file.slice(2);
+		}
 
-	if (!files || !files.length) {
+		return file;
+	});
+
+	if (!files.length) {
 		files = defaultIncludePatterns();
 	}
 

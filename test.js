@@ -19,6 +19,13 @@ test('requires new', t => {
 	}, 'Class constructor AvaFiles cannot be invoked without \'new\'');
 });
 
+test('ignores relativeness in patterns', t => {
+	const avaFiles = new AvaFiles({files: ['./foo']});
+	const file = avaFiles.files[0];
+
+	t.is(file, 'foo');
+});
+
 test('testMatcher', t => {
 	const avaFiles = new AvaFiles({files: ['**/foo*']});
 

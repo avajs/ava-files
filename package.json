@@ -49,5 +49,15 @@
       "lcov",
       "text"
     ]
+  },
+  "xo": {
+    "overrides": [
+      {
+        "files": "fixtr/**",
+        "rules": {
+          "xo/filename-case": 0
+        }
+      }
+    ]
   }
 }

@@ -1,3 +1,9 @@
+# DEPRECATED
+
+See https://github.com/avajs/ava-files/issues/11.
+
+---
+
 # ava-files [![Build Status](https://travis-ci.org/avajs/ava-files.svg?branch=master)](https://travis-ci.org/avajs/ava-files) [![Coverage Status](https://coveralls.io/repos/github/avajs/ava-files/badge.svg?branch=master)](https://coveralls.io/github/avajs/ava-files?branch=master)
 
 > File resolution for [AVA](https://ava.li)
